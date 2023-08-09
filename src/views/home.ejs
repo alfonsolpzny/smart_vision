@@ -1,0 +1,320 @@
+<%- include('partials/_header') %>
+  <title>Inicio</title>
+    </head>
+
+  <body>
+   
+    <!--NAVBAR-->
+    <%- layout('layouts/main') %>
+
+      <br>
+
+      <!--Contenido-->
+      
+      <script>
+        fetch("/estadisticasHoras")
+          .then(function (resp) {
+            return resp.json();
+          })
+          .then(function (rows) {
+            const HorasOK = [];
+        const HorasNOK = [];
+        rows.forEach(function (rows) {
+          if ((rows.clasification == 1)) {
+            HorasOK.push(rows.coincidence);
+           
+          }
+          if ((rows.clasification == 0)) {
+            HorasNOK.push(rows.coincidence)
+            
+          }
+        });
+        const HorasTotal = []
+        rows.forEach(function (rows) {
+          HorasTotal.push(rows.coincidence)
+          rows.coincidence
+        });
+        const labelsOK = [];
+        for (let i = 0; i < HorasOK.length; ++i) {
+          labelsOK.push(i.toString());
+        }
+
+        var ctxOK = document.getElementById('myChartOK').getContext('2d');
+        var myChartOK = new Chart(ctxOK, {
+          type: 'line',
+          data: {
+            labels: labelsOK,
+            datasets: [{
+              label: 'Grado OK',
+              data: HorasOK, //[cantidad de concidencias mayores a 70, cantidad de coincidencias menor a 70]
+              backgroundColor: [
+                'rgba(0, 255, 30,0.2)',
+              ],
+              borderColor: [
+                'rgba(0, 128, 0, 1)',
+              ],
+              borderWidth: 1
+            }]
+          },
+          options: {
+            onClick: (e) => {
+              var Posicion = myChartOK.data.datasets[0];
+              const canvasPosition = Chart.helpers.getRelativePosition(e, Posicion.data);
+              //var alerta = myChartOK.data.datasets[0]
+              alert(e);
+            },
+            responsive: true,
+            plugins: {
+              leyend: {
+                position: 'top',
+              },
+              title: {
+                display: true,
+                text: 'Cantidad y grado de Piezas OK en la ultima hora'
+              }
+            }
+          },
+        });
+        //Segunda grafica para  las NOK
+        const labelsNOK = [];
+        for (let i = 0; i < HorasNOK.length; ++i) {
+          labelsNOK.push(i.toString());
+        }
+        var ctxNOK = document.getElementById('myChartNOK').getContext('2d');
+        var myChartNOK = new Chart(ctxNOK, {
+          type: 'line',
+          data: {
+            labels: labelsNOK,
+            datasets: [{
+              label: 'Grado NOK',
+              data: HorasNOK, //[cantidad de concidencias mayores a 70, cantidad de coincidencias menor a 70]
+              backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+              ],
+              borderColor: [
+                'rgba(255, 99, 132, 1)',
+              ],
+              borderWidth: 1
+            }]
+          },
+          options: {
+            responsive: true,
+            plugins: {
+              leyend: {
+                position: 'top',
+              },
+              title: {
+                display: true,
+                text: 'Cantidad y grado de Piezas NOK en la ultima hora'
+              }
+            }
+          },
+        });
+          });
+      </script>
+     
+
+      <script>
+        fetch('/estadisticasDias')
+          .then(function (resp) {
+            return resp.json();
+          })
+          .then(function (rows) {
+            const horasDias = [];
+            const diasOK = [];
+            const diasNOK = [];
+            const countsOK = [];
+            const countsNOK = [];
+            const etiquetas = [];
+            const programs = [];
+            const countPrograms = [];
+            const labelPrograms = [];
+            const dataPrograms =[];
+
+            //Ciclos para obtener las horasDias que han transcurrido
+            rows.forEach(function (rows) {
+              if (horasDias.indexOf(rows.hour.split(':')[0]) === -1) {
+                horasDias.push(rows.hour.split(':')[0]);
+              }
+              if (rows.clasification == 1) {
+                diasOK.push(parseInt(rows.hour.split(':')[0]).toString());
+              }
+              if (rows.clasification == 0) {
+                diasNOK.push(parseInt(rows.hour.split(':')[0]).toString());
+              }
+              programs.push(rows.program_name);
+            });
+            ////console.log(programs);
+            for (let i = 0; i < 24; i++) {
+              etiquetas.push(i.toString() + ':00');
+            }
+
+            for (const num of diasOK) {
+              countsOK[num] = countsOK[num] ? countsOK[num] + 1 : 1;
+            }
+            for (const num of diasNOK) {
+              countsNOK[num] = countsNOK[num] ? countsNOK[num] + 1 : 1;
+            }
+            //para grafica de etiquetas
+            for (const num of programs) {
+              countPrograms[num] = countPrograms[num] ? countPrograms[num] + 1 : 1;
+            }
+            //console.log(countPrograms);
+            
+        
+            Object.keys(countPrograms).forEach((prop)=> 
+            labelPrograms.push(prop)
+            ////console.log(countPrograms.prop)
+            );
+            Object.values(countPrograms).forEach((prop)=> 
+            dataPrograms.push(prop)
+            );
+            //console.log(labelPrograms);
+            //console.log(dataPrograms);
+            
+         
+            var ctxDias = document.getElementById('myChartDias').getContext('2d');
+            var myChartDias = new Chart(ctxDias, {
+              type: 'bar',
+              data: {
+                labels: etiquetas, //etiquetas del eje X
+                datasets: [{
+                  label: 'OK', //etiqueta general
+                  data: countsOK, //[cantidad de concidencias mayores a 70, cantidad de coincidencias menor a 70]
+                  backgroundColor: [
+                    'rgba(0, 255, 30,0.2)',
+
+                  ],
+                  borderColor: [
+                    'rgba(0, 128, 0, 1)',
+
+                  ],
+                  borderWidth: 1
+                }, {
+                  label: 'NOK', //etiqueta general
+                  data: countsNOK, //[cantidad de concidencias mayores a 70, cantidad de coincidencias menor a 70]
+                  backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                  ],
+                  borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                  ],
+                  borderWidth: 1
+                }]
+              },
+              options: {
+                responsive: true,
+                plugins: {
+                  leyend: {
+                    position: 'top',
+                  },
+                  title: {
+                    display: true,
+                    text: 'Piezas OK y NOK por hora en el dia'
+                  }
+                }
+              },
+            }
+            );
+           
+            var ctxPrograms = document.getElementById('myChartPrograms').getContext('2d');
+            var myChartPrograms = new Chart(ctxPrograms, {
+              type: 'doughnut',
+              data: {
+                labels: labelPrograms, //etiquetas del eje X
+                datasets: [{
+                  label: 'OK', //etiqueta general
+                  data: dataPrograms, //[cantidad de concidencias mayores a 70, cantidad de coincidencias menor a 70]
+                  backgroundColor:  ['#3366CC','#DC3912','#FF9900','#109618','#990099','#3B3EAC','#0099C6','#DD4477','#66AA00','#B82E2E','#316395','#994499','#22AA99','#AAAA11','#6633CC','#E67300','#8B0707','#329262','#5574A6','#3B3EAC'],
+                  borderWidth: 1
+                }]
+              },
+              options: {
+                responsive: true,
+                plugins: {
+                  leyend: {
+                    position: 'top',
+                  },
+                  title: {
+                    display: true,
+                    text: 'Piezas OK y NOK por hora en el dia'
+                  }
+                }
+              },
+            }
+            );
+          });
+      </script>
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col">
+      <div class="card text-center">
+        <div class="card-header">
+          Ensamble
+        </div>
+        <div class="card-body">
+          <h5 class="card-title">Estadísticas de líneas de ensamble</h5>
+          <p class="card-text">Aquí se presentan las estadísticas de la ultima hora y del día de Smart Vision en linea #8</p>
+          <!--Cosas por agregar: no. de lineas funcionado, descanso, paro etc porcentajes de produccion graficas etc-->
+          <a href="/ensamble/horas" class="btn btn-primary">Ir a estadisticas generales individuales</a>
+          <br> <br>
+          <div class="row justify-content-md-center">
+            <!--
+            <div class="col-3">
+              <h4>Ir a un dia en especifico</h4>
+              <form action="/monitoreo" method="post">
+                <input class="form-control" type="date" name="fechas" id="fechas"> <br>
+                
+              </form>
+            </div>
+            -->
+    
+              <h5>Ver imagenes de un día en especifico</h5>          
+          </div>
+          <div class="container">
+            <form action="/images" method="post">
+            <div class="row" style="text-align: center;">
+              <div class="col-3">
+
+              </div>             
+                <div class="col-3">
+                  <input class="form-control" type="date" name="fechas1" id="fechas1">
+                </div>
+                <div class="col-3">
+                  <input class="form-control" type="date" name="fechas2" id="fechas2">
+                </div>            
+            </div><br>
+            <button type="submit">OK</button>
+          </form>
+          </div>
+
+        </div>
+        <!--Grafica  1-->
+        <canvas id="myChartOK" width="400" height="50"></canvas> <br>
+        <!--Grafica 2-->
+        <canvas id="myChartNOK" width="400" height="50"></canvas> <br>
+        <!--Grafica  3-->
+        <canvas id="myChartDias" width="400" height="100"></canvas><br>
+        <!--Grafica 4-->
+        <div style="width: 800; height: 800;  text-align: center; margin: auto;">
+          <canvas id="myChartPrograms"></canvas>
+        </div> <br>  
+
+        <div class="card-footer text-muted">
+          2 days ago
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+      
+
+      
+      
+
+
+
+      
+      <%- include('partials/_footer') %>

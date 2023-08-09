@@ -1,0 +1,2 @@
+INSERT INTO image_saving(program_name, program_number, result, average, path_rute, submission_time,tag_1,tag_2,tag_3,tag_4,tag_5) VALUES
+(10436864,38,'OK',99,'/home/gkn/Desktop/Images/Program_38/OK/OK_99_10436864_2022-12-27T00:00:22.jpg','2022-12-27T00:00:22','None','None','None','None','None');

@@ -1,0 +1,65 @@
+<%- include('partials/_header') %>
+  <!-- Archivos -->    
+  <link rel="stylesheet" href="../public/css/general.css">
+  <title>Editar Programa</title>
+</head>
+<body>
+  
+  <!--NAVBAR-->
+  
+  <%- layout('layouts/main') %>
+
+  <% if(user){ %>
+    <% if(user.username == "gkn" ){ %>
+    </div>
+</div>
+</nav>
+  <br>
+  <div class="container">
+    <form action="/deleteimages" method="post">
+    <div class="row" style="text-align: center;" >   
+      <div class="col-3" >
+      
+      </div>
+    
+        <div class="col-2">
+          <input class="form-control" type="date" name="fechas1" id="fechas1">
+        </div>
+        <div class="col-2">
+          <input class="form-control" type="date" name="fechas2" id="fechas2">
+        </div>
+        <div class="col-2">
+          <button type="submit" class="btn btn-danger">Eliminar Imagenes</button>
+        </div>            
+    </div><br>
+    
+  </form>
+  </div>
+  
+
+  <div class="container">
+    <form action="/deletefiles" method="post">
+    <div class="row" style="text-align: center;" >    
+      <div class="col-3" >
+      
+      </div>
+    
+        <div class="col-2">
+          <input class="form-control" type="date" name="fechas1" id="fechas1">
+        </div>
+        <div class="col-2">
+          <input class="form-control" type="date" name="fechas2" id="fechas2">
+        </div>
+        <div class="col-2">
+          <button type="submit" class="btn btn-danger">Eliminar registro de la base de datos</button>
+        </div>            
+    </div><br>
+    
+  </form>
+  </div>
+    <%}%>
+  <% }else{%>
+   <h1>Acesso Denegado</h1>
+  <% } %>
+
+<%- include('partials/_footer') %>

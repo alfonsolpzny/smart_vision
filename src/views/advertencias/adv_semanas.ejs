@@ -1,0 +1,30 @@
+<%- include('../partials/_header') %>
+  <title>Error  de la ultima hora</title>
+
+  </head>
+
+  <body>
+    <!--NAVBAR-->
+<%- layout('layouts/main') %>
+<br><br>
+<div class="card text-center">
+  <div class="card-header">
+    Error
+  </div>
+  <div class="card-body">
+    <h1 class="card-title">Parece que no se han produicido piezas en la ultima semana</h1>
+    <p class="card-text">Quizas quieras buscar en:</p>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col">
+          <a type="button" class="btn btn-primary" href="/ensamble/meses" >Meses</a>
+        </div>        
+      </div>
+    </div>
+  </div>
+  <div class="card-footer text-muted">
+    
+  </div>
+</div>
+
+<%- include('../partials/_footer') %>

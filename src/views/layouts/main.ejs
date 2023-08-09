@@ -1,0 +1,67 @@
+<!--NAVBAR-->
+<nav class="navbar navbar-expand-lg navbar-light bg-light" style="border-width: 7px; border-color: #FFB301;" >
+    <div class="container-fluid" style="border-width: 7px; border-color: #FFB301;" >
+      <a class="navbar-brand" href="/home">
+        <img src="/images/logosmartV.png" alt="" width="140" height="25" class="d-inline-block align-text-top">
+        Web Monitoring
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNavDropdown">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="/ensamble/horas">Ensamble</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/admin">Administrador</a>
+          </li>
+  <!--
+          <li class="nav-item">
+            <a class="nav-link" href="/Monitoreo">Monitoreo</a>
+          </li>
+        
+          <li class="nav-item">
+            <a class="nav-link" href="#">Opciones</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Ir a linea
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+              <li><a class="dropdown-item" href="http://localhost:3000/ensamble">Linea #7</a></li>
+              <li><a class="dropdown-item" href="http://localhost:3000/ensamble">Linea #8</a></li>
+              <li><a class="dropdown-item" href="#">Linea #9</a></li>
+              <li><a class="dropdown-item" href="#">Linea #10</a></li>
+            </ul>
+          </li>
+          -->
+          
+          <li class="nav-item">
+            <% if(user){ %>
+            <a class="nav-link active" aria-current="page" href=""><%= user.username %></a>
+            <% } %>
+          </li>
+
+        </ul>
+      </div>
+      <div>
+        
+        <% if(user){ %>
+          <a href="/logout" type="button" class="btn btn-secondary">Logout</a>
+          <!-- Añadir usuarios nuevos -->
+          <% if(user.username == "gkn" ){ %>
+            <a href="/signup" type="button" class="btn btn-primary">Añadir Usuario</a>
+            <a href="/userlist" type="button" class="btn btn-info">Lista de usuarios</a>
+            <a href="/deletedb" type="button" class="btn btn-info">Eliminar DBs</a>
+          <%}%>
+        <% }else{%>
+          <a href="/signin" type="button" class="btn btn-success">Sign In</a>
+        <% } %>
+      </div>
+    </div>
+  </nav>
+
+  
+<main><%- body %></main>
+  

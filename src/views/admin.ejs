@@ -1,0 +1,91 @@
+<%- include('partials/_header') %>
+    <link rel="stylesheet" href="css/tablas.css">
+    <title>Administrador</title>
+</head>
+<body>
+  <h4>Usuario: <%= user.username  %></h4>
+  
+  <!--NAVBAR-->
+  <%- layout('layouts/main') %>
+
+  <% if(user){ %>
+    
+    <% if(user.username == "gkn" ){ %>
+      <div class="container-fluid" style="text-align: center;" >
+        <table class="table table-striped table-hover">
+           <thead>
+             <tr>
+               <th scope="col">Acciones</th>
+               <th scope="col">id_program</th>
+               <th scope="col">saturation</th>
+               <th scope="col">contrast</th>
+               <th scope="col">brightness</th>
+               <th scope="col">X</th>
+               <th scope="col">Y</th>
+               <th scope="col">width</th>
+               <th scope="col">high</th>
+               <th scope="col">umbral</th>
+               <th scope="col">zoom</th>
+               <th scope="col">origin_x</th>
+               <th scope="col">origin_y</th>
+               <th scope="col">external</th>
+               <th scope="col">internal</th>
+               <th scope="col">mask_on</th>
+               <th scope="col">type_model</th>
+               <th scope="col">path_model_load</th>
+               <th scope="col">creation_date</th>
+               <th scope="col">lastupdate_date</th>
+               <th scope="col">program_name</th>
+               <th scope="col">JF_size</th>
+               <th scope="col">ball_number</th>
+               <th scope="col">ball_diameter</th>
+               <th scope="col">save_image</th>
+               
+             </tr>
+           </thead>
+           <tbody>              
+               <% for(var i=0;i<rows.length; i++){%>
+                   <tr>
+                       <td> <a href="/editprogram/<%= rows[i].id_program %>" class="btn btn-primary">Editar</a> </td>
+                       <td><%= rows[i].id_program %> </td>
+                       <td><%= rows[i].saturation %></td>
+                       <td><%= rows[i].contrast %></td>
+                       <td><%= rows[i].brightness %></td>
+                       <td><%= rows[i].X %></td>
+                       <td><%= rows[i].Y %></td>
+                       <td><%= rows[i].width %></td>
+                       <td><%= rows[i].high %></td>
+                       <td><%= rows[i].umbral %></td>
+                       <td><%= rows[i].zoom %></td>
+                       <td><%= rows[i].origin_x %></td>
+                       <td><%= rows[i].origin_y %></td>
+                       <td><%= rows[i].external %></td>
+                       <td><%= rows[i].internal %></td>
+                       <td><%= rows[i].mask_on %></td>
+                       <td><%= rows[i].type_model%></td>
+                       <td><%= rows[i].path_model_load%></td>
+                       <td><%= rows[i].creation_date %></td>
+                       <td><%= rows[i].lastupdate_date %></td>
+                       <td><%= rows[i].program_name %></td>
+                       <td><%= rows[i].JF_size %></td>
+                       <td><%= rows[i].ball_number %></td>
+                       <td><%= rows[i].ball_diameter%></td>
+                       <td><%= rows[i].save_images %></td>
+                                               
+                   </tr> 
+               <% } %>
+           </tbody>
+         </table>
+ </div>
+    <%}else{%>
+        <h1>Acceso denegado</h1>
+    <% } %>
+<% }else{%>
+    <h1>Acceso denegado</h1>
+<% } %>
+    
+  
+    
+
+<%- include('partials/_footer') %>
+

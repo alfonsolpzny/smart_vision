@@ -1,0 +1,416 @@
+<!-- Archivos -->
+<%- include('partials/_header') %>
+
+<link rel="stylesheet" href="../public/css/general.css">
+<title>Estadisticas de la ultima semana</title>
+</head>
+
+<body>
+
+  <!--NAVBAR -->
+  <%- layout('layouts/main') %> <br>
+
+
+  <script>
+    fetch("/estadisticasSemanas")
+      .then(function (resp) {
+        return resp.json();
+      })
+      .then(function (rows) {
+        //para el promedio y conteo de las OK
+        const PiezasOK = [];
+        var cantidad_HoraOk = 0;
+        //para el promedio y conteo de las NOK
+        const PiezasNOK = []
+        var cantidad_HoraNok = 0;
+        //Variables para la grafica del dia agrupada en las horas
+     
+        
+        const diasNOK = [];
+    
+      
+        const programs = []; //para la ocurrencia de horas
+        //para la grafica de circulos
+        const countPrograms = [];
+        const labelPrograms = [];
+        const dataPrograms = [];
+        //variables para los dias
+        const DiasFecha = [];
+        const countDias = [];
+        const labelDias = [];
+        const countDiasOK = [];
+        const countDiasNOK = [];
+        const test = [];
+        const countTest = [];
+
+
+        rows.forEach(function (rows) { //ciclo para la recoleccion de todos los
+          if ((rows.clasification == 1)) { // si son piezas buenas
+            PiezasOK.push(rows.coincidence);
+            cantidad_HoraOk += 1;
+          }
+          if ((rows.clasification == 0)) { //si son piezas malas
+            PiezasNOK.push(rows.coincidence)
+            cantidad_HoraNok += 1;
+          }
+          DiasFecha.push(rows.fecha); //para las fechas
+          programs.push(rows.program_name);// para locurencia delos programas
+        });
+
+        //para grafica de ocurrencia de programas
+        for (const num of programs) {
+          countPrograms[num] = countPrograms[num] ? countPrograms[num] + 1 : 1;
+        }
+        Object.keys(countPrograms).forEach((prop) => labelPrograms.push(prop)); //Etiquetas para la  ocurrencia de progranas - Final
+        Object.values(countPrograms).forEach((prop) => dataPrograms.push(prop)); //valores para la  ocurrencia de progranas - Final
+
+
+        //Para la grafica los dias
+        for (const num of DiasFecha) {
+          countDias[num] = countDias[num] ? countDias[num] + 1 : 1;
+        }
+        Object.keys(countDias).forEach((prop) => labelDias.push(prop)); //Etiquetas para la grafiica de los dias - Final
+       
+       
+        //console.log(diasNOK);
+        for(let i=0; i<labelDias.length;i++){
+          countDiasOK[i]=0;
+          countDiasNOK[i]=0;
+        }
+        
+        
+        for(let i=0;i<labelDias.length; i++){
+          rows.forEach(function (rows) { //ciclo para la recoleccion de todos los
+            if ((rows.clasification == 1)) { //si son piezas malas
+              if(labelDias[i]==rows.fecha){
+              
+                countDiasOK[i]++;
+              }
+            }            
+            if ((rows.clasification == 0)) { //si son piezas malas
+              if(labelDias[i]==rows.fecha){
+              
+                countDiasNOK[i]++;
+              }
+            }
+        });
+        }
+        console.log(countDiasOK);
+        console.log(countDiasNOK);
+        
+        
+
+
+        var chartColors = {
+          green: 'rgba(0, 128, 0, 1)',
+          grennBG: 'rgba(0, 255, 30,0.2)',
+          red: 'rgba(255, 99, 132, 1)',
+          redBG: 'rgba(255, 99, 132, 0.8)'
+        }
+
+        //Grafica del dia agrupada en horas
+        var ctxDias = document.getElementById('myChartDias').getContext('2d');
+        var myChartDias = new Chart(ctxDias, {
+          type: 'bar',
+          data: {
+            labels: labelDias, //etiquetas del eje X
+            datasets: [{
+              label: 'OK', //etiqueta general
+              data: countDiasOK, //[cantidad de concidencias mayores a 70, cantidad de coincidencias menor a 70]
+              backgroundColor: [
+                'rgba(0, 255, 30,0.2)',
+
+              ],
+              borderColor: [
+                'rgba(0, 128, 0, 1)',
+
+              ],
+              borderWidth: 1
+            }, {
+              label: 'NOK', //etiqueta general
+              data: countDiasNOK, //[cantidad de concidencias mayores a 70, cantidad de coincidencias menor a 70]
+              backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+              ],
+              borderColor: [
+                'rgba(255, 99, 132, 1)',
+              ],
+              borderWidth: 1
+            }]
+          },
+          options: {
+            responsive: true,
+            plugins: {
+              leyend: {
+                position: 'top',
+              },
+              title: {
+                display: true,
+                text: 'Piezas OK y NOK por hora en los ultimos 7 días'
+              }
+            }
+          },
+        });
+        //Grafica de la ocurrencia de  los programas
+        var ctxPrograms = document.getElementById('myChartPrograms').getContext('2d');
+        var myChartPrograms = new Chart(ctxPrograms, {
+          type: 'doughnut',
+          data: {
+            labels: labelPrograms, //etiquetas del eje X
+            datasets: [{
+              label: 'OK', //etiqueta general
+              data: dataPrograms, //[cantidad de concidencias mayores a 70, cantidad de coincidencias menor a 70]
+              backgroundColor: ['#77DD77', '#b39eb5','#FDFD96','#ca9bf7','#ffb7ce','#836953','#89cff0','#99c5c4','#aa9499','#aaf0d1','#ff694f'],
+              borderWidth: 1
+            }]
+          },
+          options: {
+            responsive: true,
+            plugins: {
+              leyend: {
+                position: 'top',
+              },
+              title: {
+                display: true,
+                text: 'Ocurrencia de programas en la ultima semana'
+              }
+            }
+          },
+        }
+        );
+
+        //Primera grafica de las OK
+        var OK = PiezasOK;
+        const largoOK = PiezasOK.length;
+        const originalDataOK = OK;
+        const labelsOK = [];
+        for (let i = 0; i < largoOK; ++i) {
+          labelsOK.push(i.toString());
+        }
+
+        //Segunda grafica para  las NOK
+        var NOK = PiezasNOK;
+        const largoNOK = PiezasNOK.length;
+        const originalDataNOK = NOK;
+        const labelsNOK = [];
+        for (let i = 0; i < largoNOK; ++i) {
+          labelsNOK.push(i.toString());
+        }
+   
+
+        //Cuarta grafica, de barras
+        var ctxNoPiezas = document.getElementById('myChartNoPiezas').getContext('2d');
+        var myChartNoPiezas = new Chart(ctxNoPiezas, {
+          type: 'bar',
+          data: {
+            labels: ['Piezas OK', 'Piezas NOK'],
+            datasets: [{
+              label: 'barras',
+              data: [cantidad_HoraOk, cantidad_HoraNok], //[cantidad de concidencias mayores a 70, cantidad de coincidencias menor a 70]
+              backgroundColor: [
+                'rgba(0, 255, 30,0.2)',
+                'rgba(255, 99, 132, 0.2)'
+              ],
+              borderColor: [
+                'rgba(0, 128, 0, 1)',
+                'rgba(255, 99, 132, 1)'
+              ],
+              borderWidth: 1
+            }]
+          },
+          options: {
+            responsive: true,
+            plugins: {
+              leyend: {
+                position: 'top',
+              },
+              title: {
+                display: true,
+                text: 'Total de piezas OK y NOK de la ultima semana'
+              }
+            }
+          },
+        });
+      });
+  </script>
+<!-- ############## Funcion para obtener los promedios y cantidad de bolas OK ############## -->
+<!--Para las OK--> 
+<% var suma_HoraOk = 0 %>
+<% var cantidad_HoraOk = 0  %>
+<!--Para las NOK--> 
+<% var suma_HoraNok = 0 %>
+<% var cantidad_HoraNok = 0  %>
+<!--Ciclo para los promedios y las sumas-->
+<% rows.forEach(function(rows){ %>
+  <% if((rows.clasification==1)){ %>
+    <%  suma_HoraOk = rows.coincidence +suma_HoraOk %>
+    <% cantidad_HoraOk +=1 %>   
+  <%}%>
+  <% if((rows.clasification==0)){ %> 
+    <%  suma_HoraNok = rows.coincidence + suma_HoraNok %>
+    <% cantidad_HoraNok +=1 %>        
+     <%}%>
+<%});%>
+
+<!--############## Funcion para obtener la hora y la hora adelantada ################# -->
+<% function addZero(i) { if (i < 10) {i = "0" + i}  return i; }  %>
+<% const d = new Date(); %>
+<% let h = addZero(d.getHours()); %>
+<%  let m = addZero(d.getMinutes()); %>
+<% let s = addZero(d.getSeconds()); %>
+<% let time = h + ":" + m  %> <!-- Tiempo con horas y minutos -->
+<% let timeFull = h + ":" + m + ":" + s %> <!-- Tiempo de la maquina completo con segundos -->
+<% var k = parseInt(h); %>
+<% k=k+1  %>
+<% let h1 = addZero(k.toString());  %>
+<% let timeParo =  h + ":" + m; %> <!-- Tiempo con horas adelantadas y minutos --> 
+
+<% const ultimaPieza =  rows[rows.length-1].hour.split(":") %> <!--divide los caracteres de la  ultima  pieza-->
+<%const modelo = rows[rows.length-1].path_model_load.split("/") %>
+
+<%  var aumentar = 0 %>
+<%  var paroMinutos = 0 %>
+<%  var paroHoras = 0 %>
+
+<% if( parseInt(m) > parseInt(ultimaPieza[1]) ){ %>
+  <% paroMinutos = parseInt(m) - parseInt(ultimaPieza[1]) %>
+<% }else if( parseInt(ultimaPieza[1]) > parseInt(m) ){ %>
+  <% paroMinutos =  (parseInt(m)+60) - (parseInt(ultimaPieza[1])) %>
+  <% aumentar = aumentar-1 %>
+<% }else{ %>
+<% } %>
+
+<% if( parseInt(h) > parseInt(ultimaPieza[0]) ){ %>
+  <% paroHoras = (parseInt(h) - parseInt(ultimaPieza[0])+ aumentar) %>
+<% }else if( parseInt(ultimaPieza[0]) > parseInt(h) ){ %>
+  <% paroHoras =  ((parseInt(h)+24) - (parseInt(ultimaPieza[0])) + aumentar ) %>
+<% }else{ %>
+<% } %>
+
+  <h1 id="estadistica"></h1>
+  <!-- Cuerpo (estadisticas) -->
+  <div class="container-fluid">
+    <div class="card">
+      <div class="card-header">
+        <h4 style="text-align: center;">Linea #08</h4>
+      </div>
+      <div class="card-body">
+        <!--Contenido general estadisticas-->
+        <h1 style="margin-left: 30%;">Estadísticas de la ultima semana</h1><br>
+        <h2>Información general</h2>
+        <!--Contenedor 1-->
+        <div class="container">
+          <div class="row">
+            <div class="col">
+              <h5>No. de Maquina: V-1062</h5>
+            </div>
+            <div class="col">
+              <h5>Operación: 30b</h5>
+            </div>
+            <div class="col">
+              <h5>Programa No: <%= rows[rows.length-1].program_name %> <br></h5>
+            </div>
+            <div class="col">
+              <h5>Hora de la maquina: <%= timeFull %>
+              </h5>
+            </div>
+          </div>
+        </div>
+
+        <!--Contenedor 2-->
+        <h2>Piezas producidas por:</h2>
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col">
+              <a type="button" class="btn btn-primary" href="/ensamble/meses">Mes</a>
+            </div>
+            <div class="col">
+              <a type="button" class="btn btn-secondary" href="/ensamble/semanas">Semana</a>
+            </div>
+            <div class="col">
+              <a type="button" class="btn btn-primary" href="/ensamble/dias">Día</a>
+            </div>
+            <div class="col">
+              <a type="button" class="btn btn-primary" href="/ensamble/horas">Hora</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mostrar Contenido -->
+        <!--Contenedor 3-->
+        <h2>No. de piezas: <%= cantidad_HoraOk + cantidad_HoraNok %>
+        </h2>
+        <div class="container">
+          <div class="row">
+            <div class="col">
+
+              <h3 style="color: green;">OK: <%= cantidad_HoraOk %>
+              </h3>
+            </div>
+            <div class="col">
+              <h3 style="color: red;">NOK: <%= cantidad_HoraNok %>
+              </h3>
+            </div>
+          </div>
+        </div> <br>
+        <!--Contenedor 4-->
+        <h2>Grado de concidencia en promedio</h2>
+        <div class="container">
+          <div class="row">
+            <div class="col">
+              <h3 style="color: green;">Piezas OK: <%= suma_HoraOk/cantidad_HoraOk %>
+              </h3>
+            </div>
+            <div class="col">
+              <h3 style="color: red;">Piezas NOK: <%= suma_HoraNok/cantidad_HoraNok %>
+              </h3>
+            </div>
+          </div>
+        </div> <br>
+        <!--Contenedor 5-->
+        <div class="container-fluid ">
+          <div class="row">
+            <div class="col">
+              <h2>Tiempo desde la última pieza: <%= paroHoras %> horas y <%= paroMinutos %> minutos</h2>
+            </div>
+          </div>
+        </div><br>
+        <!--Contenedor 6-->
+        <h2>Información de la última pieza</h2>
+        <div class="container">
+          <div class="row">
+            <div class="col">
+              <h3>Campana de <%= rows[rows.length-1].ball_number %> bolas </h3>
+            </div>
+            <div class="col">
+              <h3>Red neuronal: <%= modelo[7] %>
+              </h3>
+            </div>
+            <div class="col">
+              <h3 style="color:darkseagreen;">Umbral al <%= rows[rows.length-1].umbral %>% para pieza OK</h3>
+            </div>
+          </div>
+        </div> <br>
+        <!-- Grafica  1 -->
+        <canvas id="myChartDias" width="400" height="100"></canvas><br>
+        <!-- Grafica  2-->
+        <div style="width: 800; height: 800;  text-align: center; margin: auto;">
+          <canvas id="myChartPrograms"></canvas>
+        </div> <br>
+        <canvas id="myChartNoPiezas" width="400" height="100"></canvas>
+        <!-- Grafica  3 -->
+        <!-- <canvas id="myChartOK" width="400" height="50"></canvas> <br> -->
+        <!-- Grafica  4 -->
+        <!-- <canvas id="myChartNOK" width="400" height="50"></canvas> <br> -->
+        <!-- Grafica  5 -->
+        <!-- <canvas id="myChartHorasTotal" width="400" height="100"></canvas> <br> -->
+
+
+
+        <div class="card-footer text-muted">
+          <h5 style="text-align:center;">
+            <%= rows[rows.length-1].hour %>
+          </h5>
+        </div>
+      </div>
+      <%- include('partials/_footer') %>

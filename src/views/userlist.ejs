@@ -1,0 +1,45 @@
+<%- include('partials/_header') %>
+  <title>Lista de usuarios</title>
+</head>
+<body>
+
+  <!--NAVBAR-->
+  <%- layout('layouts/main') %>
+
+<% if(user){ %>
+    
+    <% if(user.username == "gkn" ){ %>
+        <div class="container-fluid" style="text-align: center;" >
+            <table class="table table-striped table-hover">
+               <thead>
+                 <tr>
+                   <th scope="col">Acciones</th>
+                   <th scope="col">Nombre de usuario</th>
+                   <th scope="col">Contraseña</th>
+                   <th scope="col">Nombre</th>
+                 </tr>
+               </thead>
+               <tbody>              
+                   <% for(var i=0;i<rows.length; i++){%>
+                       <tr>
+                           <td> <a href="/deleteuser/<%= rows[i].username %>" class="btn btn-danger">Eliminar</a></td>
+                           <td><%= rows[i].username %> </td>
+                           <td><%= rows[i].password %></td>
+                           <td><%= rows[i].fullname %></td>                                           
+                       </tr> 
+                   <% } %>
+               </tbody>
+             </table>  
+        </div>
+    <%}else{%>
+        <h1>Acceso denegado</h1>
+    <% } %>
+<% }else{%>
+    <h1>Acceso denegado</h1>
+<% } %>
+  
+
+  
+
+
+<%- include('partials/_footer') %>

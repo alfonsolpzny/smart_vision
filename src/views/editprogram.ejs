@@ -1,0 +1,311 @@
+<%- include('partials/_header') %>
+  <!-- Archivos -->
+  <link rel="stylesheet" href="../public/css/general.css">
+
+  <link rel="stylesheet" href="../public/bootstrap5/css/bootstrap.min.css">
+  <title>Editar Programa</title>
+
+  </head>
+
+  <body id="body" style="background-color: #2B5689;">
+
+    <!--NAVBAR-->
+    <%- layout('layouts/main') %>
+
+    <% if(user){ %>
+    
+      <% if(user.username == "gkn" ){ %>
+        <br>
+        <div class="container">
+          <div class="card text-center" style="border-width: 7px; border-color: #FFB301;">
+            <div class="card-header">
+              Configuracion del programa <%= rows.id_program %>
+            </div>
+            <h5 class="card-title">ID del programa</h5>
+            <div class="card-body">
+              <div class="container">
+  
+                <form action="/updateprogram/<%= rows.id_program %>" method="POST">
+                  <!--
+                  <div class="input-group">
+                    <input class="form-control" name="id_program" value="<%= rows.id_program%>" type="number"
+                      placeholder="<%= rows.id_program %>">
+                  </div>
+                  -->
+                  <div class="container">
+                    <!--Fila 1-->
+                    <div class="row">
+                      <!--saturation-->
+                      <div class="col">
+                        Saturación
+                        <div class="form-group">
+                          <input class="form-range" name="saturation" value="<%= rows.saturation%>" type="range" id="saturation" min="0" max="100" step="1" style="width: 80%;" oninput="saturation_range.value=value"/>
+                          <input type="number" id="saturation_range" min="0" max="100" value="<%= rows.saturation%>" oninput="saturation.value=value">
+                        </div>
+                      </div>
+                      <!--contrast-->
+                      <div class="col">
+                        Contraste
+                        <div class="form-group">
+                            <input class="form-range" name="contrast" value="<%= rows.contrast%>" type="range" id="contrast" min="0" max="100" step="1" style="width: 80%;" oninput="contrast_range.value=value"/>
+                            <input type="number" id="contrast_range" min="0" max="100" value="<%= rows.contrast%>" oninput="contrast.value=value">
+                        </div>
+                      </div>
+                    </div><br>
+  
+                    <!--Fila 2-->
+                    <div class="row">
+                      <!--brightness-->
+                      <div class="col">
+                        Brillo
+                        <div class="form-group">
+                          <input class="form-range" name="brightness" value="<%= rows.brightness%>" type="range" id="brightness" min="0" max="100" step="1" style="width: 80%;" oninput="brightness_range.value=value"/>
+                          <input type="number" id="brightness_range" min="0" max="100" value="<%= rows.brightness%>" oninput="brightness.value=value">
+                      </div>
+                      </div>
+                      <!--zoom-->
+                      <div class="col">
+                        Zoom
+                        <div class="form-group">
+                          <input class="form-range" name="zoom" value="<%= rows.zoom %>" type="range" id="zoom" min="0" max="400" step="1" style="width: 80%;" oninput="zoom_range.value=value"/>
+                          <input type="number" id="zoom_range" min="0" max="100" value="<%= rows.zoom %>" oninput="zoom.value=value">
+                      </div>
+                      </div>
+  
+                      
+                    </div><br>
+  
+  
+                    <!--Fila 3-->
+                    <div class="row">
+                      <!--X-->
+                      <div class="col">
+                        X corner
+                        <div class="form-group">
+                          <input class="form-range" name="X" value="<%= rows.X %>" type="range" id="X" min="0" max="620" step="1" style="width: 80%;" oninput="X_range.value=value"/>
+                          <input type="number" id="X_range" min="0" max="100" value="<%= rows.X %>" oninput="X.value=value">
+                      </div>
+                      </div>
+                      <!--Y-->
+                      <div class="col">
+                        Y corner
+                        <div class="form-group">
+                          <input class="form-range" name="Y" value="<%= rows.Y %>" type="range" id="Y" min="0" max="460" step="1" style="width: 80%;" oninput="Y_range.value=value"/>
+                          <input type="number" id="Y_range" min="0" max="100" value="<%= rows.Y %>" oninput="Y.value=value">
+                      </div>
+                      </div>             
+                    </div><br>
+                    <!--Fila 4-->
+                    <div class="row">
+                      <!--width-->
+                      <div class="col">
+                        Ancho
+                        <div class="form-group">
+                          <input class="form-range" name="width" value="<%= rows.width %>" type="range" id="width" min="0" max="640" step="1" style="width: 80%;" oninput="width_range.value=value"/>
+                          <input type="number" id="width_range" min="0" max="100" value="<%= rows.width %>" oninput="width.value=value">
+                      </div>
+                      </div>
+                      <!--high-->
+                      <div class="col">
+                        Altura
+                        <div class="form-group">
+                          <input class="form-range" name="high" value="<%= rows.high %>" type="range" id="high" min="0" max="480" step="1" style="width: 80%;" oninput="high_range.value=value"/>
+                          <input type="number" id="high_range" min="0" max="100" value="<%= rows.high %>" oninput="high.value=value">
+                      </div>
+                      </div>                    
+                    </div><br>
+  
+                    <!--Fila 5-->
+                    <div class="row">
+                      <!--origin_x-->
+                      <div class="col">
+                        Origen en X
+                        <div class="form-group">
+                          <input class="form-range" name="origin_x" value="<%= rows.origin_x %>" type="range" id="origin_x" min="0" max="640" step="1" style="width: 80%;" oninput="origin_x_range.value=value"/>
+                          <input type="number" id="origin_x_range" min="0" max="100" value="<%= rows.origin_x %>" oninput="origin_x.value=value">
+                      </div>
+                      </div>
+                      <!--origin_y-->
+                      <div class="col">
+                        Origen en Y
+                        <div class="form-group">
+                          <input class="form-range" name="origin_y" value="<%= rows.origin_y %>" type="range" id="origin_y" min="0" max="480" step="1" style="width: 80%;" oninput="origin_y_range.value=value"/>
+                          <input type="number" id="origin_y_range" min="0" max="100" value="<%= rows.origin_y %>" oninput="origin_y.value=value">
+                      </div>
+                      </div>                    
+                    </div><br>
+  
+                    <!--Fila 6-->
+                    <div class="row">
+                      <!--external-->
+                      <div class="col">
+                        Externo
+                        <div class="form-group">
+                          <input class="form-range" name="external" value="<%= rows.external %>" type="range" id="external" min="0" max="1000" step="1" style="width: 80%;" oninput="external_range.value=value"/>
+                          <input type="number" id="external_range" min="0" max="100" value="<%= rows.external %>" oninput="external.value=value">
+                      </div>
+                      </div>
+  
+                       <!--internal-->
+                       <div class="col">
+                        Interna
+                        <div class="form-group">
+                          <input class="form-range" name="internal" value="<%= rows.internal %>" type="range" id="internal" min="0" max="1000" step="1" style="width: 80%;" oninput="internal_range.value=value"/>
+                          <input type="number" id="internal_range" min="0" max="100" value="<%= rows.internal %>" oninput="internal.value=value">
+                      </div>
+                      </div>
+                    </div><br>
+  
+                    
+  
+                    <!--Fila 8-->
+                    <div class="row">
+                      <!--umbral-->
+                      <div class="col">
+                        Umbral
+                        <div class="form-group">
+                          <input class="form-range" name="umbral" value="<%= rows.umbral %>" type="range" id="umbral" min="0" max="400" step="1" style="width: 80%;" oninput="umbral_range.value=value"/>
+                          <input type="number" id="umbral_range" min="0" max="100" value="<%= rows.umbral %>" oninput="umbral.value=value">
+                      </div>
+                      </div>
+  
+                      <!--mask_on-->
+                      <div class="col">
+                        Mask on/off
+                        <div class="input-group">
+                         <input class="form-control" name="mask_on" value="<%= rows.mask_on %>" type="number"
+                            placeholder="<%= rows.mask_on %>">
+                        </div>
+                      </div>
+                    </div><br>
+                    <!--Fila 9-->
+                    <div class="row">
+                      <!--type_model-->
+                      <div class="col">
+                        Tipo de modelo
+                        <div class="input-group">
+                          <input class="form-control" name="type_model" value="<%= rows.type_model%>" type="number"
+                            placeholder="<%= rows.type_model %>">
+                        </div>
+                      </div>
+                      <!--path_model_load-->
+                      <div class="col">
+                        Ruta del modelo
+                        <div class="input-group">
+                          <input class="form-control" name="path_model_load" value="<%= rows.path_model_load%>"
+                            type="text" placeholder="<%= rows.path_model_load %>">
+                        </div>
+                      </div>
+                    </div><br>
+  
+  
+                    <!--Fila 10-->
+                    <div class="row">
+                      <!--creation_date-->
+                      <div class="col">
+                        Fecha de creacion
+                        <div class="input-group">
+                          <input class="form-control" name="creation_date" value="<%= rows.creation_date%>" type="date"
+                            placeholder="<%= rows.creation_date %>">
+                        </div>
+                      </div>
+                      <!--lastupdate_date-->
+                      <div class="col">
+                        Ultima actualización
+                        <div class="input-group">
+                          <input class="form-control" name="lastupdate_date" value="<%= rows.lastupdate_date%>"
+                            type="date" placeholder="<%= rows.lastupdate_date %>">
+                        </div>
+                      </div>
+                    </div><br>
+  
+  
+                    <!--Fila 11-->
+                    <div class="row">
+                      <!--program_name-->
+                      <div class="col">
+                        Numero de parte
+                        <div class="input-group">
+                          <input class="form-control" name="program_name" value="<%= rows.program_name%>" type="text"
+                            placeholder="<%= rows.program_name %>">
+                        </div>
+                      </div>
+                      <!--JF_size-->
+                      <div class="col">
+                        Tamaño deJF
+                        <div class="input-group">
+                          <input class="form-control" name="JF_size" value="<%= rows.JF_size%>" type="text"
+                            placeholder="<%= rows.JF_size %>">
+                        </div>
+                      </div>
+                    </div><br>
+  
+                    <!--Fila 12-->
+                    <div class="row">
+                      <!--ball_number-->
+                      <div class="col">
+                        Numero de bolas
+                        <div class="input-group">
+                          <input class="form-control" name="ball_number" value="<%= rows.ball_number%>" type="number"
+                            placeholder="<%= rows.ball_number %>">
+                        </div>
+                      </div>
+                      <!--balll_diameter-->
+                      <div class="col">
+                        Diametro de bolas
+                        <div class="input-group">
+                          <input class="form-control" name="ball_diameter" value="<%= rows.ball_diameter%>" type="number"
+                            placeholder="<%= rows.ball_diameter %>">
+                        </div>
+                      </div>
+                    </div><br>
+  
+                    <!--Fila 13-->
+                    <div class="row">
+                      <!--save_image-->
+                      <div class="col">
+                        Guardado de imagenes
+                        <div class="input-group">
+                          <input class="form-control" name="save_images" value="<%= rows.save_images%>" type="number"
+                            placeholder="<%= rows.save_images %>">
+                        </div>
+                      </div>
+                      <div class="col">
+  
+                      </div>
+                    </div><br>
+  
+                    <div class="row">
+                      <div class="col">
+  
+                      </div>
+                      <div class="col">
+  
+                      </div>
+                    </div><br>
+  
+  
+                    <!-- <input type="submit"> -->
+                    <button type="submit" class="btn btn-success">Guardar</button>
+                    <a type="button" class="btn btn-danger" href="/admin">Cancelar</a>
+  
+                </form>
+  
+              </div>
+            </div>
+  
+  
+            <div class="card-footer text-muted">
+             
+            </div>
+          </div>
+        </div>
+  
+      <%}else{%>
+          <h1>Acceso denegado</h1>
+      <% } %>
+  <% }else{%>
+      <h1>Acceso denegado</h1>
+  <% } %>
+
+  </body>

@@ -1,0 +1,33 @@
+delete from users where username like 'p%';
+
+##########################################################################################
+
+mysqldump -u root -proot dbui > [ruta]/respaldo.sql
+
+pasarlo a sqlite  en la carpeta del script
+
+./mysql2sqlite respaldo.sql | sqlite3 respaldo.db
+
+##########################################################################################
+
+SELECT * from pieces JOIN program using (id_program);
+
+Datos que voy a usar:
+SELECT id_program, fecha, hour, coincidencie, clasification, type_model, no_part, JF_size, ball_number from pieces JOIN program using (id_program);
+
+
+#####################################################################
+
+Campos de charts:
+
+<canvas></canvas>
+
+<script>
+    type
+    data
+    options
+</script>
+
+<script>
+rendderiza 
+</script>
